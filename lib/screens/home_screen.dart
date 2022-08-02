@@ -62,7 +62,7 @@ backgroundColor: Colors.black,
                       percent: 0.3,
                       //making timer line rounded instead of a straight line going around the circle
                       circularStrokeCap: CircularStrokeCap.round,
-                      center: Text('14:36',
+                      center: Text('$remainingTime',
                       style: TextStyle(fontSize: 40, color: Colors.white),
                       ),
                       progressColor: Colors.green,
