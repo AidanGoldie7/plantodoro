@@ -1,18 +1,39 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:plantpomodoro/utils/constants.dart';
 import 'package:plantpomodoro/widget/progress_icons.dart';
+import 'package:plantpomodoro/widget/custom_button.dart';
+import 'package:plantpomodoro/model/pomodoro_status.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
-
   @override
   _HomeState createState() => _HomeState();
 }
 
+const _btnTextStart = 'START POMODORO';
+const _btnTextResumePomodoro = 'RESUME POMODORO';
+const _btnTextResumeBreak = 'RESUME BREAK';
+const _btnTextStartShortBreak = 'TAKE SHORT BREAK';
+const _btnTextStartLongBreak = 'TAKE LONG BREAK';
+const _btnTextStartNewSet = 'START NEW SET';
+const _btnTextPause = 'PAUSE';
+const _btnTextReset = 'RESET';
+
+
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
+    int remainingTime = pomodoroTotalTime;
+    String mainBtnText = _btnTextStart;
+    PomodoroStatus pomodoroStatus = PomodoroStatus.pausedPomodoro;
+    Timer _timer;
+    int pomodoroNum = 0;
+    int setNum = 0;
+
     return Scaffold(
 backgroundColor: Colors.black,
       body: SafeArea(
@@ -23,11 +44,11 @@ backgroundColor: Colors.black,
                 height: 10,
               ),
               Text(
-                'Pomodoro Application',
+                'Pomodoro Number: $pomodoroNum',
                 style: TextStyle(fontSize: 32, color: Colors.grey[400]),
               ),
               Text(
-                'Set : 3',
+                'Set : $setNum',
                 style: TextStyle(fontSize: 22, color: Colors.grey[400]),
               ),
               Expanded(
@@ -56,11 +77,23 @@ backgroundColor: Colors.black,
                     SizedBox(
                       height: 10,
                     ),
+                    Text('status description',
+                    style : TextStyle(color: Colors.white),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    CustomButton(
+                        onTap: () {},
+                      text: 'Start',
+                    ),
+                    CustomButton(
+                      onTap: () {},
+                      text: 'Reset',
+                    ),
                   ],
                 ),
               ),
-
-
             ],
           ),
         ),
