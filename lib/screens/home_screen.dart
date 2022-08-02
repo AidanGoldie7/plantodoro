@@ -62,7 +62,8 @@ backgroundColor: Colors.black,
                       percent: 0.3,
                       //making timer line rounded instead of a straight line going around the circle
                       circularStrokeCap: CircularStrokeCap.round,
-                      center: Text('$remainingTime',
+                      center: Text(
+                        _secondsToFormattedString(remainingTime),
                       style: TextStyle(fontSize: 40, color: Colors.white),
                       ),
                       progressColor: Colors.green,
@@ -99,5 +100,20 @@ backgroundColor: Colors.black,
         ),
       ),
     );
+  }
+
+  _secondsToFormattedString(int seconds) {
+    int roundedMinutes = seconds ~/ 60;
+    int remainingSeconds = seconds - (roundedMinutes * 60);
+    String remainingSecondsFormatted;
+
+    if (remainingSeconds <10) {
+      remainingSecondsFormatted = '0$remainingSeconds';
+    }
+    else {
+      remainingSecondsFormatted = remainingSeconds.toString();
+    }
+
+    return '$roundedMinutes:$remainingSecondsFormatted';
   }
 }
