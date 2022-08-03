@@ -49,7 +49,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-    backgroundColor: Colors.black,
+    backgroundColor: Colors.grey[100],
       body: SafeArea(
         child: Center(
           child: Column(
@@ -59,11 +59,11 @@ class _HomeState extends State<Home> {
               ),
               Text(
                 'Pomodoro Number: $pomodoroNum',
-                style: TextStyle(fontSize: 32, color: Colors.grey[400]),
+                style: TextStyle(fontSize: 32, color: Colors.black),
               ),
               Text(
                 'Set : $setNum',
-                style: TextStyle(fontSize: 22, color: Colors.grey[400]),
+                style: TextStyle(fontSize: 22, color: Colors.black),
               ),
               Expanded(
                 //centering the clock
@@ -72,17 +72,24 @@ class _HomeState extends State<Home> {
                   children: [
                     CircularPercentIndicator(
                       radius: 220.0,
-                      lineWidth: 15.0,
+                      lineWidth: 2.0,
                       percent: _getPomodoroPercentage(),
                       //making timer line rounded instead of a straight line going around the circle
                       circularStrokeCap: CircularStrokeCap.round,
                       center: Text(
                         _secondsToFormattedString(remainingTime),
-                      style: TextStyle(fontSize: 40, color: Colors.white),
+                      style: TextStyle(fontSize: 40, color: Colors.grey[400]),
                       ),
                       //uses the map made in constants.dart file to dynamically allocate colour
                       progressColor: statusColor[pomodoroStatus],
                     ),
+                    /*new Container(
+                      color: Colors.grey[200],
+                      child: new Image.network(
+                        'https://images.pexels.com/photos/1525043/pexels-photo-1525043.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
+                      ),
+                      alignment: Alignment.center,
+                    ),*/
                     SizedBox(
                         height: 10
                     ),
@@ -95,7 +102,7 @@ class _HomeState extends State<Home> {
                     ),
                     Text(
                       statusDescription[pomodoroStatus].toString(),
-                      style : TextStyle(color: Colors.white),
+                      style : TextStyle(color: Colors.grey[400]),
                     ),
                     SizedBox(
                       height: 10,

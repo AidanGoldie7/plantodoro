@@ -11,15 +11,15 @@ class ProgressIcons extends StatelessWidget {
     final iconSize = 50.0;
 
     final doneIcon = Icon(
-      Icons.beenhere,
-      color: Colors.green,
+      Icons.water_drop_outlined,
+      color: Colors.lightBlueAccent,
       size: iconSize,
     );
 
     final notDoneIcon = Icon(
-      Icons.beenhere_outlined,
-      color: Colors.green,
-      size: iconSize,
+      Icons.water_drop_outlined,
+      color: Colors.grey[500],
+      size: 50,
     );
 
 

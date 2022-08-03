@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:plantpomodoro/model/pomodoro_status.dart';
 
-const pomodoroTotalTime = 1 * 6;
-const shortBreakTime = 1 * 6;
-const longBreakTime = 1 * 6;
+const pomodoroTotalTime = 6 * 1;
+const shortBreakTime = 8 * 1;
+const longBreakTime = 6 * 1;
 const pomodoroPerSet = 4;
 
 //defining the text to be used
 const Map<PomodoroStatus, String> statusDescription = {
-  PomodoroStatus.runningPomodoro: 'Pomodoro is running, time to be focussed',
+  PomodoroStatus.runningPomodoro: 'Pomodoro started, time to be focussed',
   PomodoroStatus.pausedPomodoro: 'Ready for a focused pomodoro?',
   PomodoroStatus.runningShortBreak: 'Short break started, time to relax',
   PomodoroStatus.pausedShortBreak: 'Let\'s have a short break?',
