@@ -32,6 +32,11 @@ class _HomeState extends State<Home> {
   int pomodoroNum = 0;
   int setNum = 0;
 
+  @override
+  void dispose() {
+    _cancelTimer();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -122,7 +127,10 @@ class _HomeState extends State<Home> {
     return '$roundedMinutes:$remainingSecondsFormatted';
   }
 
-_getPomodoroPercentage() {
+
+
+  //needed to fill the ring properly when counting down
+  _getPomodoroPercentage() {
     int totalTime;
     switch (pomodoroStatus) {
       case PomodoroStatus.runningPomodoro:
@@ -147,10 +155,12 @@ _getPomodoroPercentage() {
         totalTime = pomodoroTotalTime;
         break;
     }
-
     double percentage = (totalTime - remainingTime) / totalTime;
     return percentage;
 }
+
+
+
 
   _mainButtonPressed() {
     switch (pomodoroStatus) {
@@ -158,7 +168,7 @@ _getPomodoroPercentage() {
         _startPomodoroCountdown();
         break;
       case PomodoroStatus.runningPomodoro:
-        // TODO: Handle this case.
+        _pausePomodoroCountdown();
         break;
       case PomodoroStatus.runningShortBreak:
         // TODO: Handle this case.
@@ -213,6 +223,18 @@ _getPomodoroPercentage() {
               }
         });
   }
+
+
+
+  _pausePomodoroCountdown() {
+    pomodoroStatus = PomodoroStatus.pausedPomodoro;
+    _cancelTimer();
+    setState(() {
+      mainBtnText = _btnTextResumePomodoro;
+    });
+  }
+
+
 
 
   _cancelTimer() {
