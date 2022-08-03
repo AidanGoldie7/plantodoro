@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
@@ -7,6 +6,7 @@ import 'package:plantpomodoro/utils/constants.dart';
 import 'package:plantpomodoro/widget/progress_icons.dart';
 import 'package:plantpomodoro/widget/custom_button.dart';
 import 'package:plantpomodoro/model/pomodoro_status.dart';
+
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -25,17 +25,18 @@ const _btnTextReset = 'RESET';
 
 
 class _HomeState extends State<Home> {
+  int remainingTime = pomodoroTotalTime;
+  String mainBtnText = _btnTextStart;
+  PomodoroStatus pomodoroStatus = PomodoroStatus.pausedPomodoro;
+  Timer? _timer;
+  int pomodoroNum = 0;
+  int setNum = 0;
+
+
   @override
   Widget build(BuildContext context) {
-    int remainingTime = pomodoroTotalTime;
-    String mainBtnText = _btnTextStart;
-    PomodoroStatus pomodoroStatus = PomodoroStatus.pausedPomodoro;
-    Timer _timer;
-    int pomodoroNum = 0;
-    int setNum = 0;
-
     return Scaffold(
-backgroundColor: Colors.black,
+    backgroundColor: Colors.black,
       body: SafeArea(
         child: Center(
           child: Column(
@@ -59,34 +60,36 @@ backgroundColor: Colors.black,
                     CircularPercentIndicator(
                       radius: 220.0,
                       lineWidth: 15.0,
-                      percent: 0.3,
+                      percent: _getPomodoroPercentage(),
                       //making timer line rounded instead of a straight line going around the circle
                       circularStrokeCap: CircularStrokeCap.round,
                       center: Text(
                         _secondsToFormattedString(remainingTime),
                       style: TextStyle(fontSize: 40, color: Colors.white),
                       ),
-                      progressColor: Colors.green,
+                      //uses the map made in constants.dart file to dynamically allocate colour
+                      progressColor: statusColor[pomodoroStatus],
                     ),
                     SizedBox(
                         height: 10
                     ),
-                    const ProgressIcons(
-                      total: 4,
-                      done: 3,
+                    ProgressIcons(
+                      total: pomodoroPerSet,
+                      done: pomodoroNum - (setNum * pomodoroPerSet),
                     ),
                     SizedBox(
                       height: 10,
                     ),
-                    Text('status description',
-                    style : TextStyle(color: Colors.white),
+                    Text(
+                      statusDescription[pomodoroStatus].toString(),
+                      style : TextStyle(color: Colors.white),
                     ),
                     SizedBox(
                       height: 10,
                     ),
                     CustomButton(
-                        onTap: () {},
-                      text: 'Start',
+                        onTap: _mainButtonPressed,
+                      text: mainBtnText,
                     ),
                     CustomButton(
                       onTap: () {},
@@ -102,12 +105,14 @@ backgroundColor: Colors.black,
     );
   }
 
+
+
   _secondsToFormattedString(int seconds) {
     int roundedMinutes = seconds ~/ 60;
     int remainingSeconds = seconds - (roundedMinutes * 60);
     String remainingSecondsFormatted;
 
-    if (remainingSeconds <10) {
+    if (remainingSeconds < 10) {
       remainingSecondsFormatted = '0$remainingSeconds';
     }
     else {
@@ -116,4 +121,104 @@ backgroundColor: Colors.black,
 
     return '$roundedMinutes:$remainingSecondsFormatted';
   }
+
+_getPomodoroPercentage() {
+    int totalTime;
+    switch (pomodoroStatus) {
+      case PomodoroStatus.runningPomodoro:
+        totalTime = pomodoroTotalTime;
+        break;
+      case PomodoroStatus.pausedPomodoro:
+        totalTime = pomodoroTotalTime;
+        break;
+      case PomodoroStatus.runningShortBreak:
+        totalTime = shortBreakTime;
+        break;
+      case PomodoroStatus.pausedShortBreak:
+        totalTime = shortBreakTime;
+        break;
+      case PomodoroStatus.runningLongBreak:
+        totalTime = longBreakTime;
+        break;
+      case PomodoroStatus.pausedLongBreak:
+        totalTime = longBreakTime;
+        break;
+      case PomodoroStatus.setFinished:
+        totalTime = pomodoroTotalTime;
+        break;
+    }
+
+    double percentage = (totalTime - remainingTime) / totalTime;
+    return percentage;
 }
+
+  _mainButtonPressed() {
+    switch (pomodoroStatus) {
+      case PomodoroStatus.pausedPomodoro:
+        _startPomodoroCountdown();
+        break;
+      case PomodoroStatus.runningPomodoro:
+        // TODO: Handle this case.
+        break;
+      case PomodoroStatus.runningShortBreak:
+        // TODO: Handle this case.
+        break;
+      case PomodoroStatus.pausedShortBreak:
+        // TODO: Handle this case.
+        break;
+      case PomodoroStatus.runningLongBreak:
+        // TODO: Handle this case.
+        break;
+      case PomodoroStatus.pausedLongBreak:
+        // TODO: Handle this case.
+        break;
+      case PomodoroStatus.setFinished:
+        // TODO: Handle this case.
+        break;
+    }
+  }
+
+
+
+  _startPomodoroCountdown() {
+    pomodoroStatus = PomodoroStatus.runningPomodoro;
+    _cancelTimer();
+
+    _timer = Timer.periodic(
+        Duration(seconds: 1),
+            (timer) => {
+              if (remainingTime > 0)
+              {
+                setState(() {
+                  remainingTime--;
+                  mainBtnText = _btnTextPause;
+                })
+              } else {
+                // playSound(),
+                pomodoroNum ++,
+                _cancelTimer(),
+                 if (pomodoroNum % pomodoroPerSet == 0){
+                   pomodoroStatus = PomodoroStatus.pausedLongBreak,
+                    setState(() {
+                    remainingTime = longBreakTime;
+                    mainBtnText = _btnTextStartLongBreak;
+                    }),
+                 } else {
+                   pomodoroStatus = PomodoroStatus.pausedShortBreak,
+                   setState(() {
+                     remainingTime = shortBreakTime;
+                     mainBtnText = _btnTextStartShortBreak;
+                   }),
+                 }
+              }
+        });
+  }
+
+
+  _cancelTimer() {
+    if (_timer != null){
+      _timer!.cancel();
+    }
+  }
+}
+

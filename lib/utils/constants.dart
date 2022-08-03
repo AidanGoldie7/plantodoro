@@ -13,7 +13,7 @@ const Map<PomodoroStatus, String> statusDescription = {
   PomodoroStatus.runningShortBreak: 'Short break started, time to relax',
   PomodoroStatus.pausedShortBreak: 'Let\'s have a short break?',
   PomodoroStatus.runningLongBreak: 'Long break started, time to kick back',
-  PomodoroStatus.pausedLongBreak: 'Let\s have a long break?',
+  PomodoroStatus.pausedLongBreak: 'Let\'s have a long break?',
   PomodoroStatus.setFinished: 'Congrats, you deserve a long break, ready to start?',
 };
 
