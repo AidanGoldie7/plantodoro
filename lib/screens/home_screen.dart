@@ -6,6 +6,7 @@ import 'package:plantpomodoro/utils/constants.dart';
 import 'package:plantpomodoro/widget/progress_icons.dart';
 import 'package:plantpomodoro/widget/custom_button.dart';
 import 'package:plantpomodoro/model/pomodoro_status.dart';
+import 'package:audioplayers/audio_cache.dart';
 
 
 class Home extends StatefulWidget {
@@ -25,6 +26,7 @@ const _btnTextReset = 'RESET';
 
 
 class _HomeState extends State<Home> {
+  static AudioCache player = AudioCache();
   int remainingTime = pomodoroTotalTime;
   String mainBtnText = _btnTextStart;
   PomodoroStatus pomodoroStatus = PomodoroStatus.pausedPomodoro;
@@ -36,6 +38,12 @@ class _HomeState extends State<Home> {
   void dispose() {
     _cancelTimer();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    player.load('bell.mp3');
   }
 
   @override
@@ -339,7 +347,7 @@ _stopCountDown(){
 
 
   _playSound() {
-    print ('play sound');
+   player.play('bell.mp3');
   }
 }
 

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:plantpomodoro/model/pomodoro_status.dart';
 
-const pomodoroTotalTime = 25 * 60;
-const shortBreakTime = 5 * 60;
-const longBreakTime = 30 * 60;
+const pomodoroTotalTime = 1 * 6;
+const shortBreakTime = 1 * 6;
+const longBreakTime = 1 * 6;
 const pomodoroPerSet = 4;
 
 //defining the text to be used
