@@ -97,7 +97,7 @@ class _HomeState extends State<Home> {
                       text: mainBtnText,
                     ),
                     CustomButton(
-                      onTap: () {},
+                      onTap: _resetButtonPressed,
                       text: 'Reset',
                     ),
                   ],
@@ -235,6 +235,22 @@ class _HomeState extends State<Home> {
   }
 
 
+
+  _resetButtonPressed() {
+    pomodoroNum = 0;
+    setNum = 0;
+    _cancelTimer();
+    _stopCountDown();
+  }
+
+
+_stopCountDown(){
+    pomodoroStatus = PomodoroStatus.pausedPomodoro;
+    setState(() {
+      mainBtnText = _btnTextStart;
+      remainingTime = pomodoroTotalTime;
+    });
+}
 
 
   _cancelTimer() {
