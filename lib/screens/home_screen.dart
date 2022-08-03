@@ -171,19 +171,20 @@ class _HomeState extends State<Home> {
         _pausePomodoroCountdown();
         break;
       case PomodoroStatus.runningShortBreak:
-        // TODO: Handle this case.
+        _pauseShortBreakCountdown();
         break;
       case PomodoroStatus.pausedShortBreak:
-        // TODO: Handle this case.
+        _startShortBreak();
         break;
       case PomodoroStatus.runningLongBreak:
-        // TODO: Handle this case.
+        _pauseLongBreakCountdown();
         break;
       case PomodoroStatus.pausedLongBreak:
-        // TODO: Handle this case.
+        _startLongBreak();
         break;
       case PomodoroStatus.setFinished:
-        // TODO: Handle this case.
+        setNum++;
+        _startPomodoroCountdown();
         break;
     }
   }
@@ -252,11 +253,93 @@ _stopCountDown(){
     });
 }
 
+  _startShortBreak(){
+    pomodoroStatus = PomodoroStatus.runningShortBreak;
+    setState(() {
+      mainBtnText = _btnTextPause;
+    });
+    _cancelTimer();
+    _timer = Timer.periodic(
+        Duration (seconds: 1),
+            (timer) => {
+          if (remainingTime > 0)
+            {
+            setState(() {
+              remainingTime--;
+            }),
+            }
+          else
+            {
+            _playSound(),
+              remainingTime = pomodoroTotalTime,
+              _cancelTimer(),
+              pomodoroStatus = PomodoroStatus.pausedPomodoro,
+              setState(() {
+                mainBtnText = _btnTextStart;
+              }),
+            }
+  });
+}
+
+  _startLongBreak(){
+    pomodoroStatus = PomodoroStatus.runningLongBreak;
+    setState(() {
+      mainBtnText = _btnTextPause;
+    });
+    _cancelTimer();
+    _timer = Timer.periodic(
+        Duration (seconds: 1),
+            (timer) => {
+          if (remainingTime > 0)
+            {
+              setState(() {
+                remainingTime--;
+              }),
+            }
+          else
+            {
+              _playSound(),
+              remainingTime = pomodoroTotalTime,
+              _cancelTimer(),
+              pomodoroStatus = PomodoroStatus.setFinished,
+              setState(() {
+                mainBtnText = _btnTextStartNewSet;
+              }),
+            }
+        });
+  }
+
+
+
+  _pauseShortBreakCountdown(){
+    pomodoroStatus = PomodoroStatus.pausedShortBreak;
+    _pauseBreakCountdown();
+  }
+
+
+
+  _pauseLongBreakCountdown(){
+    pomodoroStatus = PomodoroStatus.pausedLongBreak;
+    _pauseBreakCountdown();
+  }
+
+  _pauseBreakCountdown(){
+    _cancelTimer();
+    setState(() {
+      mainBtnText = _btnTextResumeBreak;
+    });
+
+  }
 
   _cancelTimer() {
     if (_timer != null){
       _timer!.cancel();
     }
+  }
+
+
+  _playSound() {
+    print ('play sound');
   }
 }
 
